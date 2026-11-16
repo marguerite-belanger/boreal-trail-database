@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Boreal Trail Database Management Project</title>
+<meta name="description" content="An end-to-end database management project: legacy spreadsheet data transformed into a normalized relational database and business insights.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="From legacy data to business insights: Boreal Trail database management project">
+<meta property="og:description" content="Business rules, an ER model, a normalized MySQL schema and SQL analysis for a fictional outdoor-gear retailer.">
+<meta name="theme-color" content="#FF6B35">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23FF6B35'/%3E%3Cpath d='M5 24l7-12 5 7 4-5 6 10z' fill='%23fff' stroke='%2312241D' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js');</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="progress" aria-hidden="true"></div>
+
+<header>
+  <nav class="pill" id="pill" aria-label="Sections">
+    <a class="brand" href="#top">
+      <svg viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><rect x="1" y="1" width="30" height="30" rx="8" fill="#FF6B35" stroke="#12241D" stroke-width="2"/><path d="M5 24l7-12 5 7 4-5 6 10z" fill="#fff" stroke="#12241D" stroke-width="2" stroke-linejoin="round"/></svg>
+      <span>Boreal Trail project</span>
+    </a>
+    <ul class="pill-links" id="pill-links">
+      <li><a href="#challenge">Challenge</a></li>
+      <li><a href="#model">Model</a></li>
+      <li><a href="#build">Build</a></li>
+      <li><a href="#analysis">Analysis</a></li>
+      <li><a href="#takeaways">Takeaways</a></li>
+      <li><a href="#team">Team</a></li>
+    </ul>
+    <button class="pill-menu" type="button" aria-expanded="false" aria-controls="pill-links">Menu</button>
+  </nav>
+</header>
+
+<main id="main">
+
+<!-- Hero -->
+<section class="hero-wrap" id="top">
+  <div class="topo" data-seed="7" data-rings="11" data-cx="0.84" data-cy="0.3" aria-hidden="true"></div>
+  <div class="hero">
+    <div class="hero-copy">
+      <p class="project-name">Boreal Trail Database Management Project</p>
+      <h1><span class="from">From legacy data</span> <span class="to"><mark>to business insights</mark></span></h1>
+      <p class="lede">An end-to-end database management project for Boreal Trail Supply Co., a fictional outdoor-gear retailer: legacy spreadsheet data transformed into a normalized relational database and business insights.</p>
+      <dl class="meta">
+        <div><dt>Project</dt><dd>Database management, Summer 2026</dd></div>
+        <div><dt>Client</dt><dd>Boreal Trail Supply Co. (fictional)</dd></div>
+        <div><dt>Deliverables</dt><dd>Business rules and ER model, normalized schema and SQL build, SQL queries and business memo</dd></div>
+        <div><dt>Team</dt><dd>Four students</dd></div>
+      </dl>
+      <p class="cta">
+        <a class="btn btn-solid" href="#overview">Read the case study</a>
+        <a class="btn btn-line" href="#model">View the ERD</a>
+      </p>
+    </div>
+
+    <figure class="hero-graph">
+      <svg class="stamp" viewBox="0 0 140 140" role="img" aria-label="Stamp: fictional company, sample data">
+        <defs><path id="stamp-ring" d="M70,70 m-53,0 a53,53 0 1,1 106,0 a53,53 0 1,1 -106,0"/></defs>
+        <circle cx="70" cy="70" r="67" fill="#FFC93C" stroke="#12241D" stroke-width="3"/>
+        <g class="ring"><text font-family="Figtree, sans-serif" font-size="12" font-weight="700" fill="#12241D"><textPath href="#stamp-ring" textLength="326" lengthAdjust="spacing">FICTIONAL COMPANY &#8226; SAMPLE DATA &#8226; </textPath></text></g>
+        <circle cx="70" cy="70" r="36" fill="#fff" stroke="#12241D" stroke-width="3"/>
+        <path d="M46 88l17-30 12 17 9-12 14 25z" fill="#FF6B35" stroke="#12241D" stroke-width="3" stroke-linejoin="round"/>
+      </svg>
+      <div id="graph" class="graph" aria-label="Diagram of the nine tables in the MySQL schema and the foreign key relationships between them"></div>
+      <ul class="g-legend" aria-label="Table groups">
+        <li><i class="dot g-sales"></i>Sales</li>
+        <li><i class="dot g-catalogue"></i>Catalogue</li>
+        <li><i class="dot g-supply"></i>Sourcing</li>
+        <li><i class="dot g-places"></i>Locations and stock</li>
+      </ul>
+      <figcaption id="graph-caption" class="graph-caption" aria-live="polite">
+        <strong>The MySQL schema: nine tables and nine foreign keys.</strong> Hover or focus a table to see how it relates to the others.
+      </figcaption>
+      <noscript><img src="assets/erd.png" alt="Entity-relationship diagram for Boreal Trail Supply Co."></noscript>
+    </figure>
+  </div>
+</section>
+
+<!-- Project overview -->
+<section class="glance" id="overview" aria-labelledby="h-glance">
+  <h2 id="h-glance">Project overview</h2>
+  <p class="glance-lead">The project followed one progression: business rules, then an ERD, then a normalized schema, then a running MySQL database, and finally SQL queries that turn the data into findings. It was completed in three deliverables.</p>
+  <ol class="steps">
+    <li>
+      <span class="n">P1</span>
+      <h3>Business rules and ER model</h3>
+      <p>We analyzed the legacy dataset, wrote business rules and design assumptions, and modelled the data in an ERD, including a used-gear consignment and buyback extension.</p>
+      <a href="#model">See the model</a>
+    </li>
+    <li>
+      <span class="n">P2</span>
+      <h3>Normalized schema and SQL build</h3>
+      <p>We converted the model into a normalized schema and built it in MySQL with primary keys, foreign keys, composite keys and constraints, then populated and tested it.</p>
+      <a href="#build">See the build</a>
+    </li>
+    <li>
+      <span class="n">P3</span>
+      <h3>SQL queries and business memo</h3>
+      <p>We wrote SQL queries to answer managerial questions and moved from results to findings, reported in a business memo to Boreal Trail's Operations Director.</p>
+      <a href="#analysis">See the analysis</a>
+    </li>
+  </ol>
+</section>
+
+<!-- 01 The challenge -->
+<section class="band band-challenge" id="challenge" aria-labelledby="h-challenge">
+  <div class="sec">
+    <div class="rail"><span class="no">01</span><span class="rname">The challenge</span></div>
+    <div class="body">
+      <h2 id="h-challenge">A retailer running on spreadsheets</h2>
+      <p class="lead">Boreal Trail Supply Co. is a fictional outdoor-gear retailer with two stores, a distribution centre and an online store. It has around 48,000 customers and 3,000 products across six categories, and it relies on spreadsheets exported from an aging cash register system.</p>
+
+      <div class="split">
+        <div>
+          <p>When we reviewed the legacy dataset, we identified four issues.</p>
+          <dl class="problems">
+            <div><dt>Duplicate customer records</dt><dd>Several customers appear more than once under different email addresses, so multiple records exist instead of one consistent profile.</dd></div>
+            <div><dt>Invalid discount values</dt><dd>Only a few discount values should be valid, yet the file shows discounts greater than 100%.</dd></div>
+            <div><dt>No enforced rules</dt><dd>A spreadsheet has nothing to force the data to be valid, so errors accumulate as the business grows.</dd></div>
+            <div><dt>One supplier per product</dt><dd>The legacy file records a single supplier for each product, which cannot represent a product supplied by several suppliers.</dd></div>
+          </dl>
+          <p>We reviewed the file ourselves and used AI to check for irregularities. It flagged the duplicate customer emails and the discount values above 100%, and we verified both in the data before including them in our scope.</p>
+          <p><strong>Our goal:</strong> replace the spreadsheet-based approach with a relational database that enforces its own rules.</p>
+        </div>
+        <figure class="sheet-fig">
+          <svg id="sheet" viewBox="0 0 560 350" role="img" aria-labelledby="sheet-t sheet-d">
+            <title id="sheet-t">Illustration of a flat spreadsheet with problem rows</title>
+            <desc id="sheet-d">A grid with columns for order number, customer, email, product, price, discount and supplier. Two rows have the customer and email cells outlined to show one customer appearing under two emails, and one discount cell is outlined and marked above 100 percent.</desc>
+          </svg>
+          <figcaption>
+            <span class="key"><i class="swatch"></i>Same customer, different email addresses</span>
+            <span class="key"><i class="swatch"></i>Discount value above 100%</span>
+            <span class="note">An illustration of the issues we found, not the real data.</span>
+          </figcaption>
+        </figure>
+      </div>
+
+      <div class="aside">
+        <h3>Our extension: used-gear consignment and buyback</h3>
+        <p>In addition to selling products, Boreal Trail takes in used outdoor gear to be resold. Each item is graded and inspected before being listed for sale. Once it sells, the consignor receives a payout that depends on the item's grade and on how long it was available for sale (0&ndash;30, 31&ndash;60 or 61+ days). Any item unsold past 90 days is returned to the consignor or donated, based on the consignor's preference.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 The model -->
+<section class="band band-model" id="model" aria-labelledby="h-model">
+  <div class="sec">
+    <div class="rail"><span class="no">02</span><span class="rname">The model</span></div>
+    <div class="body wide">
+      <h2 id="h-model">From business rules to an ER model</h2>
+      <p class="lead">We wrote 15 business rules, documented our design assumptions wherever the brief was silent, and modelled the result in an entity-relationship diagram (ERD) with 16 entities, including the consignment extension.</p>
+      <p class="howto">The numbered markers on the diagram point to four modelling decisions, described below it.</p>
+
+      <div class="erd-wrap">
+        <figure class="erd" id="erd">
+          <div class="erd-stage">
+            <img src="assets/erd.png" width="1279" height="1189" alt="Entity-relationship diagram with 16 entities: customer, customer_order, order_line, product, category, supplier, product_supplier, inventory, location, employee, and the consignment tables consigned_item, consignor, grade, day_band_rate, grade_day_band_rate and payout.">
+            <button class="pin" type="button" data-pin="1" style="left:22.4%;top:24.4%" aria-label="Note 1: location">1</button>
+            <button class="pin" type="button" data-pin="2" style="left:76.2%;top:42.3%" aria-label="Note 2: product_supplier">2</button>
+            <button class="pin" type="button" data-pin="3" style="left:87.6%;top:29.4%" aria-label="Note 3: unit_price_at_sale">3</button>
+            <button class="pin" type="button" data-pin="4" style="left:3.6%;top:92.3%" aria-label="Note 4: grade_day_band_rate">4</button>
+          </div>
+          <figcaption>The P1 ERD, drawn in Visual Paradigm. <button class="linklike" type="button" id="erd-open">Open full size</button></figcaption>
+        </figure>
+
+        <ol class="notes" id="erd-notes">
+          <li data-pin="1"><h3>Locations as one entity</h3><p>The website and the warehouse are modelled as location records rather than separate entities, so orders and inventory reuse a single location foreign key.</p></li>
+          <li data-pin="2"><h3>Product&ndash;supplier bridge</h3><p>The many-to-many relationship between products and suppliers is resolved by the <code>product_supplier</code> bridge entity, which also carries the supplier SKU and unit cost.</p></li>
+          <li data-pin="3"><h3>Price at the time of sale</h3><p><code>order_line</code> stores <code>unit_price_at_sale</code>, the price charged when the transaction occurred, separately from the current catalogue price on <code>product</code>.</p></li>
+          <li data-pin="4"><h3>Payout by grade and day-band</h3><p>Consignor payout depends on the item's grade and on the day-band in which it sells (0&ndash;30, 31&ndash;60, 61+ days). GRADE and DAY_BAND_RATE form a many-to-many relationship, resolved by the <code>grade_day_band_rate</code> bridge entity.</p></li>
+        </ol>
+      </div>
+
+      <h3 class="sub">From business rules to the ERD</h3>
+      <div class="rules">
+        <div><p class="rule"><span class="rid">BR-7</span>Each ORDER belongs to exactly one CUSTOMER; each CUSTOMER may create one or many ORDERs.</p><p class="then"><code>customer_order</code> carries <code>customer_id</code>, a foreign key referencing <code>customer</code>.</p></div>
+        <div><p class="rule"><span class="rid">BR-12</span>Each ORDER must be placed at exactly one LOCATION; one LOCATION can receive many ORDERs.</p><p class="then"><code>customer_order</code> carries <code>location_id</code>, so store, web and warehouse orders share one structure.</p></div>
+        <div><p class="rule"><span class="rid">BR-14</span>Each GRADE has a payout rate for one or more DAY_BAND_RATE; each DAY_BAND_RATE has a payout rate for one or more GRADE.</p><p class="then">A many-to-many relationship resolved by <code>grade_day_band_rate</code>, which stores the payout percentage for each grade and day-band pair.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 The build -->
+<section class="band band-build dark" id="build" aria-labelledby="h-build">
+  <div class="ridge" aria-hidden="true"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 90V58L90 30 170 52 270 12 380 58 470 34 590 70 700 22 800 56 900 8 1010 60 1110 28 1220 62 1330 24 1440 56V90Z" fill="currentColor"/></svg></div>
+  <div class="topo" data-seed="21" data-rings="12" data-cx="0.12" data-cy="0.55" aria-hidden="true"></div>
+  <div class="sec">
+    <div class="rail"><span class="no">03</span><span class="rname">The build</span></div>
+    <div class="body wide">
+      <h2 id="h-build">A normalized schema, built in MySQL</h2>
+      <p class="lead">We converted the ER model into a normalized relational schema and implemented it in MySQL with primary keys, foreign keys, composite keys and constraints, then populated it with sample data and tested the script.</p>
+      <p>The script creates the independent tables first (<code>customer</code>, <code>location</code>, <code>category</code>, <code>supplier</code>), then the tables with single-parent foreign keys (<code>product</code>, <code>inventory</code>, <code>customer_order</code>), then the tables with multiple or composite foreign keys (<code>order_line</code>, <code>product_supplier</code>).</p>
+
+      <h3 class="sub">Composite key and constraints in ORDER_LINE</h3>
+      <p>The <code>order_line</code> table combines several of the design tools in one place. The highlighted lines are the keys and constraints.</p>
+      <div class="code-row">
+        <div class="code-col">
+<pre class="code" data-sql data-hl="8,9,10,11,12" aria-label="SQL for the order_line table"><code>CREATE TABLE order_line (
+    order_id            INT          NOT NULL,
+    line_no             SMALLINT     NOT NULL,
+    product_id          INT          NOT NULL,
+    qty                 INT          NOT NULL,
+    unit_price_at_sale  DECIMAL(8,2) NOT NULL,
+    discount_pct        DECIMAL(4,2) NOT NULL DEFAULT 0.0,
+    PRIMARY KEY (order_id, line_no),
+    FOREIGN KEY (order_id)   REFERENCES customer_order(order_id),
+    FOREIGN KEY (product_id) REFERENCES product(product_id),
+    CHECK (qty &gt; 0),
+    CHECK (discount_pct BETWEEN 0 AND 90)
+);</code></pre>
+        </div>
+        <ul class="callouts">
+          <li><strong>Composite primary key.</strong> A line is identified by <code>order_id</code> and <code>line_no</code> together.</li>
+          <li><strong>Foreign keys.</strong> They enforce referential integrity: every line references an existing order and product.</li>
+          <li><strong>CHECK constraints.</strong> Quantity must be positive and <code>discount_pct</code> is limited to 0&ndash;90, addressing the discounts above 100% found in the legacy data.</li>
+        </ul>
+      </div>
+
+      <h3 class="sub">Historical pricing: two prices, two facts</h3>
+      <p><code>product.unit_price</code> is the current catalogue price. <code>order_line.unit_price_at_sale</code> is the price the customer actually paid when the transaction occurred. These are different facts, so we intentionally store both.</p>
+      <div class="pricepair" role="group" aria-label="Nordic 2P Tent: price paid on order 10412 versus current catalogue price">
+        <div class="pp-item pp-a">
+          <p class="pp-when">Order 10412, 14 March 2025</p>
+          <p class="pp-price">$329.00</p>
+          <p class="pp-what"><code>unit_price_at_sale</code>, the price paid</p>
+        </div>
+        <div class="pp-line" aria-hidden="true"></div>
+        <div class="pp-item pp-b">
+          <p class="pp-when">Today</p>
+          <p class="pp-price">$349.00</p>
+          <p class="pp-what"><code>unit_price</code>, the current catalogue price of the Nordic 2P Tent</p>
+        </div>
+      </div>
+      <p>If prices were read from the product table, old receipts, sales reports and refunds would change whenever the catalogue price changed. A refund on this order should return the $329.00 the customer paid, not today's $349.00.</p>
+      <p><strong>Normalization check.</strong> <code>unit_price_at_sale</code> can look like a dependency on <code>product_id</code>, but <code>product_id</code> does not determine it: the Nordic 2P Tent sold for $329.00 on order 10412 while the catalogue lists $349.00. The column depends on the whole composite key, so <code>order_line</code> remains in third normal form (3NF).</p>
+
+      <h3 class="sub">PRODUCT_SUPPLIER: resolving a many-to-many relationship</h3>
+      <p>A product can be supplied by several suppliers and a supplier provides many products, so the relationship is resolved with a bridge table keyed on <code>product_id</code> and <code>supplier_id</code>.</p>
+      <div class="code-row">
+        <div class="code-col">
+<pre class="code" data-sql data-hl="6" aria-label="SQL for the product_supplier table"><code>CREATE TABLE product_supplier (
+    supplier_id   INT          NOT NULL,
+    product_id    INT          NOT NULL,
+    supplier_sku  VARCHAR(30)  NOT NULL,
+    unit_cost     DECIMAL(8,2) NOT NULL,
+    PRIMARY KEY (product_id, supplier_id),
+    FOREIGN KEY (supplier_id) REFERENCES supplier(supplier_id),
+    FOREIGN KEY (product_id)  REFERENCES product(product_id),
+    CHECK (unit_cost &gt; 0)
+);</code></pre>
+        </div>
+        <ul class="callouts">
+          <li><strong>Composite primary key.</strong> It prevents the same product&ndash;supplier pair from being recorded twice.</li>
+          <li><strong>Room to grow.</strong> Our sample data lists one supplier per product, but the structure supports several.</li>
+        </ul>
+      </div>
+
+      <h3 class="sub">Testing integrity rules</h3>
+      <p>The script ends with two reject INSERT statements, kept commented out so the script runs cleanly. Each violates a named constraint: a duplicate primary key on <code>customer</code> (entity integrity) and an order line referencing a product that does not exist (referential integrity).</p>
+      <div class="code-row">
+        <div class="code-col">
+<pre class="code" data-sql aria-label="SQL for a test insert that violates a foreign key"><code>-- Referential-integrity violation: product_id 9999 does not exist in
+-- product, so this fails the FOREIGN KEY order_line.product_id ->
+-- product.product_id.
+INSERT INTO order_line (order_id, line_no, product_id, qty, unit_price_at_sale, discount_pct)
+VALUES (10412, 3, 9999, 1, 50.00, 0);</code></pre>
+        </div>
+        <ul class="callouts">
+          <li>With the comment markers removed, this INSERT fails the foreign key from <code>order_line.product_id</code> to <code>product.product_id</code>.</li>
+        </ul>
+      </div>
+
+      <div class="scope">
+        <h3>Scope of the build</h3>
+        <p>The ERD covers the full design, including the consignment extension. The MySQL build implements the nine core tables; the extension tables (<code>consigned_item</code>, <code>consignor</code>, <code>grade</code>, <code>day_band_rate</code> and <code>payout</code>) are modelled but not built.</p>
+        <p>In total, the script defines nine tables, nine foreign keys, five CHECK constraints and three composite primary keys.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 The analysis -->
+<section class="band band-analysis" id="analysis" aria-labelledby="h-analysis">
+  <div class="sec">
+    <div class="rail"><span class="no">04</span><span class="rname">The analysis</span></div>
+    <div class="body wide">
+      <h2 id="h-analysis">From SQL to findings</h2>
+      <p class="lead">We used the database to answer managerial questions, moving from SQL to results to findings. We wrote eight queries; a selection follows, each with what the result shows and its limitations.</p>
+      <p class="caveat">All figures come from the small sample dataset built for the project: five products, four customers and four orders. They demonstrate the queries, not the performance of a real retailer.</p>
+
+      <article class="study">
+        <div class="study-text">
+          <h3>Which five products generate the most revenue?</h3>
+          <p><span class="chip chip-res">Result</span> The Nordic 2P Tent generates the most revenue at $329.00, followed by the Laurentide Sandal Pro ($231.47) and the Boreal Down Jacket ($210.81). The five products total $948.77, all of the revenue in the sample. Revenue is calculated from <code>unit_price_at_sale</code>, so the tent is counted at the $329 paid rather than today's $349 catalogue price.</p>
+          <p><span class="chip chip-lim">Limitations</span> The sample contains only five products, so the top five is the entire catalogue. The ranking would be more meaningful across the full catalogue of 3,000 products.</p>
+        </div>
+        <div class="study-viz">
+          <p class="viz-title" id="viz1-t">Revenue by product</p>
+          <ol class="bars" id="chart-revenue" aria-labelledby="viz1-t"></ol>
+        </div>
+        <details class="study-sql">
+          <summary>View the SQL</summary>
+<pre class="code" data-sql aria-label="SQL for top products by revenue"><code>SELECT
+    p.product_name,
+    SUM(ol.qty * ol.unit_price_at_sale) AS total_revenue
+FROM order_line ol
+JOIN product p ON ol.product_id = p.product_id
+GROUP BY p.product_id, p.product_name
+ORDER BY total_revenue DESC
+LIMIT 5;</code></pre>
+        </details>
+      </article>
+
+      <article class="study">
+        <div class="study-text">
+          <h3>What is the margin between each product's current selling price and its cheapest supplier cost?</h3>
+          <p><span class="chip chip-res">Result</span> In dollars, the Nordic 2P Tent has the largest margin ($144) and the Trail Stove Mini the smallest ($30). As a share of catalogue price the difference narrows: all five products fall between 40% and 44%.</p>
+          <p><span class="chip chip-lim">Limitations</span> Margin is catalogue price minus supplier unit cost, so it excludes discounts, shipping and store costs. Each product has one supplier in the sample, so the cheapest supplier is simply that supplier.</p>
+        </div>
+        <div class="study-viz">
+          <p class="viz-title" id="viz2-t">Catalogue price split into supplier cost and margin</p>
+          <div class="legend" aria-hidden="true"><span><i class="sw sw-cost"></i>Supplier cost</span><span><i class="sw sw-margin"></i>Margin</span></div>
+          <ol class="bars stacked" id="chart-margin" aria-labelledby="viz2-t"></ol>
+        </div>
+        <details class="study-sql">
+          <summary>View the SQL</summary>
+<pre class="code" data-sql aria-label="SQL for product margin"><code>SELECT
+    p.product_name,
+    p.unit_price               AS catalogue_price,
+    MIN(ps.unit_cost)          AS cheapest_supplier_cost,
+    p.unit_price - MIN(ps.unit_cost) AS margin
+FROM product p
+JOIN product_supplier ps ON ps.product_id = p.product_id
+GROUP BY p.product_id, p.product_name, p.unit_price
+ORDER BY margin ASC;</code></pre>
+        </details>
+      </article>
+
+      <div class="trio">
+        <article>
+          <h3>Which products are below the reorder threshold?</h3>
+          <p>Only the Boreal Down Jacket at the web store falls below five units, with 0 on hand. The query is limited to store locations, so the distribution centre is excluded by design.</p>
+        </article>
+        <article>
+          <h3>How much revenue does each category produce at each location?</h3>
+          <table class="mini">
+            <caption class="sr">Revenue by location and category</caption>
+            <tbody>
+              <tr><th scope="row">Plateau, Camping</th><td>$393.50</td></tr>
+              <tr><th scope="row">Plateau, Footwear</th><td>$231.47</td></tr>
+              <tr><th scope="row">Plateau, Apparel</th><td>$210.81</td></tr>
+              <tr><th scope="row">Web, Apparel</th><td>$112.99</td></tr>
+            </tbody>
+          </table>
+          <p>Quartier DIX30 does not appear because its only order has no line items.</p>
+        </article>
+        <article>
+          <h3>Why do some results omit order 10500?</h3>
+          <p>The database holds four orders, but two of our results show three. Order 10500 has no line items, and an inner join to <code>order_line</code> excludes orders without lines. As a result, the payment-type query reports credit card on 3 of 3 orders while the database holds 4. Knowing which rows a join removes is part of interpreting a result.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 Takeaways -->
+<section class="band band-takeaways" id="takeaways" aria-labelledby="h-takeaways">
+  <div class="sec">
+    <div class="rail"><span class="no">05</span><span class="rname">Key takeaways</span></div>
+    <div class="body wide">
+      <h2 id="h-takeaways">Key takeaways</h2>
+      <ul class="lessons">
+        <li><h3>Database design</h3><p>Business rules and documented assumptions are the foundation of the schema. Where the brief was silent, writing our assumptions down made each modelling decision explicit.</p></li>
+        <li><h3>Data integrity</h3><p>Constraints enforce integrity in the database itself. Primary keys, foreign keys and CHECK rules reject invalid data, such as a discount above 100%, before it is stored.</p></li>
+        <li><h3>SQL</h3><p>Joins determine which rows appear in a result. An inner join removed an order with no line items from two of our outputs, so we noted it alongside each result.</p></li>
+        <li><h3>Business analysis</h3><p>A figure needs context. The tent earns the most dollars per unit, yet as a share of catalogue price the five products fall within four percentage points of each other.</p></li>
+        <li><h3>Validating conclusions</h3><p>A correct query can still mislead. Before stating a finding, we checked what each result leaves out: small samples, excluded rows and costs the calculation ignores.</p></li>
+        <li><h3>Verifying AI output</h3><p>AI is a reviewer, not the author. We tested each suggestion against source data, the project brief, course material or MySQL documentation before accepting, correcting or rejecting it.</p></li>
+      </ul>
+
+      <h3 class="sub">AI Checks: documented judgment</h3>
+      <p class="ledger-intro">Each deliverable included an AI Check. We used AI to review our business rules, ERD, normalization and SQL, and to organize outputs, but we verified every suggestion against the source data, the course material, our business rules or the MySQL documentation. Sometimes we accepted a suggestion, sometimes we corrected it and sometimes we rejected it. Five examples follow.</p>
+      <div class="ledger" role="table" aria-label="AI Check examples: what we asked, what we got right, and what we corrected or verified">
+        <div class="lrow lhead" role="row"><span role="columnheader">What we asked</span><span role="columnheader">What we got right</span><span role="columnheader">What we corrected/verified</span></div>
+        <div class="lrow" role="row">
+          <span role="cell"><b class="stage">P1</b>Take our assumption (payout depends on the item's grade and day-band) and generate the expected business rules.</span>
+          <span role="cell">Showed us where our original category-based idea failed the required M:N relationship.</span>
+          <span role="cell"><b class="tag ok">Accepted after verifying</b>We re-checked the extension brief to confirm a grade-based M:N made sense before adopting it.</span>
+        </div>
+        <div class="lrow" role="row">
+          <span role="cell"><b class="stage">P1</b>Find irregularities in our legacy spreadsheet.</span>
+          <span role="cell">Flagged duplicate customer emails and invalid discount values (100%+).</span>
+          <span role="cell"><b class="tag ok">Verified</b>We checked the data ourselves and compared the issues with our Module 2 findings before adding them to our scope.</span>
+        </div>
+        <div class="lrow" role="row">
+          <span role="cell"><b class="stage">P1</b>Review our final ERD against our business rules.</span>
+          <span role="cell">Caught two conflicting CONSIGNOR tables.</span>
+          <span role="cell"><b class="tag fix">Corrected</b>We merged the tables together.</span>
+        </div>
+        <div class="lrow" role="row">
+          <span role="cell"><b class="stage">P2</b>Check our normalization walk for <code>order_line</code>.</span>
+          <span role="cell">Flagged a possible dependency between <code>product_id</code> and <code>unit_price_at_sale</code> worth double-checking.</span>
+          <span role="cell"><b class="tag no">Tested, not confirmed</b>We tested it against actual data (order 10412 at $329.00 versus the $349.00 catalogue price). No functional dependency exists, so the table remains 3NF.</span>
+        </div>
+        <div class="lrow" role="row">
+          <span role="cell"><b class="stage">P2</b>Review our SQL script for formatting and syntax issues.</span>
+          <span role="cell">Flagged <code>employee_id</code> (no employee table exists) and <code>item_id</code> (left over from unused consignment tables) as errors.</span>
+          <span role="cell"><b class="tag ok">Accepted after verifying</b>We removed both attributes and confirmed the script ran clean afterwards.</span>
+        </div>
+      </div>
+      <p class="ledger-end">In each case AI supported the review, and the decision to accept, correct or reject a suggestion stayed with the team.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 The team -->
+<section class="band band-team" id="team" aria-labelledby="h-team">
+  <div class="sec">
+    <div class="rail"><span class="no">06</span><span class="rname">The team</span></div>
+    <div class="body">
+      <h2 id="h-team">The team</h2>
+      <p class="lead">We completed the project as a team across three deliverables: the business rules and ER model, the normalized schema and SQL build, and the SQL queries with a business memo.</p>
+      <ul class="people" id="people">
+        <li><span class="hello">Hello, I'm</span><span class="pname">Marguerite Belanger</span></li>
+        <li><span class="hello">Hello, I'm</span><span class="pname">Maria Ramirez Mejia</span></li>
+        <li><span class="hello">Hello, I'm</span><span class="pname">Inocenta Merloi-Revera</span></li>
+        <li><span class="hello">Hello, I'm</span><span class="pname">Madelene Carrasco</span></li>
+      </ul>
+      <p>Thank you to our instructor for teaching the course, and for encouraging us to turn the course project into a portfolio piece.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="ridge" aria-hidden="true"><svg viewBox="0 0 1440 90" preserveAspectRatio="none"><path d="M0 90V50L110 20 200 60 310 6 420 52 520 26 640 68 760 18 860 58 960 10 1070 56 1170 24 1280 60 1360 30 1440 52V90Z" fill="currentColor"/></svg></div>
+  <div class="foot-in">
+    <p><strong>Boreal Trail Database Management Project</strong><br>A database management course project, Summer 2026.</p>
+    <p>Boreal Trail Supply Co. is a fictional company created for the course, and all figures on this page are sample data.</p>
+  </div>
+</footer>
+
+<dialog id="erd-dialog" aria-label="Full-size entity-relationship diagram">
+  <form method="dialog"><button class="dialog-close" aria-label="Close">Close</button></form>
+  <div class="dialog-scroll"><img src="assets/erd.png" alt="Full-size entity-relationship diagram for Boreal Trail Supply Co."></div>
+</dialog>
+
+<script src="app.js" defer></script>
+</body>
+</html>
